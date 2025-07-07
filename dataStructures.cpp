@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
+#include <variant>
+#include <memory>
 
-using std::string, std::cout;
+using std::string, std::cout, std::variant;
 /*
 -linked list
 -stack
@@ -11,17 +13,24 @@ using std::string, std::cout;
 
 struct Node{
     private:
-        string item;
-        int pointer;
+        variant<string, int> item;
+        std::unique_ptr<Node> pointer;
     public:
-        Node(const string& item){
+        Node(const variant<string, int>& item){
             this->item = item;
+            pointer = nullptr;
         }
         ~Node(){
             cout << "Node revoking from memory";
         }
-        void setPointer(int nextIndex){
-            pointer = nextIndex;
+        void setPointer(std::unique_ptr<Node> nextNode){
+            this->pointer = std::move(nextNode);
+        }
+        const variant<string, int>& getItem() const{
+            return item;
+        }
+        const Node* getNextNode() const{
+            return pointer.get();
         }
 };
 
@@ -35,7 +44,7 @@ class LinkedList{
             list.push_back(firstItem);
             headPointer = 0;
         }
-        void insertItem(const Node& item){
+        void insertItem(Node& item){
             list.push_back(item);
         }
 };
