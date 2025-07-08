@@ -2,8 +2,12 @@
 #include <vector>
 #include <variant>
 #include <memory>
+#include <bits/stdc++.h>
 
-using std::string, std::cout, std::variant;
+using std::string, 
+std::cout, 
+std::variant,
+std::unique_ptr;
 /*
 -linked list
 -stack
@@ -14,16 +18,11 @@ using std::string, std::cout, std::variant;
 struct Node{
     private:
         variant<string, int> item;
-        std::unique_ptr<Node> pointer;
+        unique_ptr<Node> pointer;
     public:
-        Node(const variant<string, int>& item){
-            this->item = item;
-            pointer = nullptr;
-        }
-        ~Node(){
-            cout << "Node revoking from memory";
-        }
-        void setPointer(std::unique_ptr<Node> nextNode){
+        Node(const variant<string, int>& nodeItem) : item(nodeItem), pointer(nullptr) {}
+        
+        void setPointer(unique_ptr<Node> nextNode){
             this->pointer = std::move(nextNode);
         }
         const variant<string, int>& getItem() const{
@@ -32,19 +31,26 @@ struct Node{
         const Node* getNextNode() const{
             return pointer.get();
         }
+        unique_ptr<Node>& getNextUniPtr(){
+            return pointer;
+        }
+
+        bool operator==(const Node& otherNode) const{
+            return item == otherNode.item;
+        }
+        bool operator!=(const Node& otherNode) const {
+            return !(*this == otherNode);
+        }
 };
 
 class LinkedList{
     private:
-        std::vector<Node> list;
-        int headPointer;
+        unique_ptr<Node> headNode;
     public:
-        LinkedList(const Node& firstItem){
-            list.reserve(10);
-            list.push_back(firstItem);
-            headPointer = 0;
-        }
-        void insertItem(Node& item){
-            list.push_back(item);
+        LinkedList() : headNode(nullptr) {}
+        LinkedList(unique_ptr<Node> firstNode) : headNode(std::move(firstNode)) {}
+
+        ~LinkedList() {
+            cout << "Releasing linked list\n";
         }
 };
