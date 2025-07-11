@@ -28,7 +28,7 @@ struct Node{
         const variant<string, int>& getItem() const{
             return item;
         }
-        const Node* getNextNode() const{
+        Node* getNextNode() {
             return pointer.get();
         }
         unique_ptr<Node>& getNextUniPtr(){
@@ -52,5 +52,20 @@ class LinkedList{
 
         ~LinkedList() {
             cout << "Releasing linked list\n";
+        }
+
+        void insertNode(const Node& node){
+            unique_ptr<Node> newNode = std::make_unique<Node>(node.getItem());
+            if (headNode == nullptr){
+                headNode = std::move(newNode);
+            }
+            if (headNode != nullptr){
+                Node* currentNode = headNode.get();
+                while (currentNode->getNextNode() != nullptr){
+                    currentNode = currentNode->getNextNode();
+
+
+                }
+            }
         }
 };
