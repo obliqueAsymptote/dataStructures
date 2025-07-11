@@ -28,6 +28,9 @@ struct Node{
         const variant<string, int>& getItem() const{
             return item;
         }
+        const Node* getNextNode() const{
+            return pointer.get();
+        }
         Node* getNextNode() {
             return pointer.get();
         }
@@ -59,13 +62,33 @@ class LinkedList{
             if (headNode == nullptr){
                 headNode = std::move(newNode);
             }
-            if (headNode != nullptr){
+            else{
                 Node* currentNode = headNode.get();
                 while (currentNode->getNextNode() != nullptr){
                     currentNode = currentNode->getNextNode();
-
-
                 }
+                currentNode->setPointer(std::move(newNode));
+            }
+        }
+        void outputList(){
+            Node* currentNode = headNode.get();
+            while (currentNode != nullptr){
+                std::visit([](const auto& value){
+                    cout << value << " ";
+                }, currentNode->getItem());
+                currentNode = currentNode->getNextNode();
             }
         }
 };
+
+int main(){
+    Node nodeOne = Node("meow");
+    Node nodeTwo = Node("wroof");
+    LinkedList testList;
+    testList.insertNode(nodeOne);
+    testList.insertNode(nodeTwo);
+    
+    testList.outputList();
+
+    return 0;
+}
