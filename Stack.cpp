@@ -1,20 +1,19 @@
 #include <iostream>
-#include <memory>
 #include <variant>
 #include <list>
-#include <stdexcept>
 #include <optional>
 
-using std::unique_ptr,
+using 
 std::string,
 std::variant,
 std::cout,
 std::cin,
-std::optional;
+std::optional,
+std::list;
 
 class Stack{
     private:
-        std::list<variant<string, int>> stack;
+        list<variant<string, int>> stack;
         const int stackSize;
         int nextSpace;
         
@@ -30,6 +29,7 @@ class Stack{
             nextSpace += 1;
             if (nextSpace > stackSize){
                 cout << "Stack is now full\n";
+                printStack();
                 return true;
             }
             cout << "Next available space at position " << nextSpace << "\n";
@@ -45,6 +45,16 @@ class Stack{
             variant<string, int> poppedItem = stack.back();
             stack.pop_back();
             return poppedItem;
+        }
+        void printStack(){
+            cout << "-----\n";
+            stack.reverse();
+            for (const auto& element : stack){
+                std::visit([](const auto& item){
+                    cout << item << "\n";
+                }, element);
+            }
+            cout << "-----\n";
         }
 };
 
