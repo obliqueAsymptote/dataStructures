@@ -3,6 +3,7 @@
 #include <deque>
 #include <optional>
 #include <memory>
+#include <functional>
 
 using
 std::variant,
@@ -19,47 +20,59 @@ class CircularQueue{
         int rearPointer;
         int currentSize;
         int capacity;
-        deque<variant<string, int>> queue;
+        deque<string> queue;
 
     public:
-        CircularQueue(const int& userCapacity) : headPointer(0), rearPointer(0), capacity(userCapacity) {
+        CircularQueue(const int& userCapacity) : headPointer(0), rearPointer(0), currentSize(0), capacity(userCapacity) {
             queue.resize(capacity);
         }
-        void enqueue(const variant<string, int>& element){
-            if ((rearPointer + 1) % capacity == headPointer){
+        void enqueue(const string& element){
+            if (isFull()){
                 cout << "Queue is full\n";
                 return;
             }
-            rearPointer = (rearPointer + 1) % capacity;
             queue[rearPointer] = element;
+            rearPointer = (rearPointer + 1) % capacity;
             currentSize ++;
 
         }
-        optional<variant<string, int>> dequeue(){
-            if (rearPointer == headPointer){
+        optional<string> dequeue(){
+            if (isEmpty()){
                 cout << "Queue is empty\n";
                 return nullopt;
             }
-            headPointer = (headPointer + 1) % capacity;
             auto copiedElement = queue[headPointer];
+            headPointer = (headPointer + 1) % capacity;
             currentSize--;
 
             return copiedElement;
 
         }
-        variant<string, int> getFront()const {
+        string getFront()const {
+            if (currentSize == 0){
+                return "Queue is empty";
+            }
             return queue[headPointer];
         }
-        variant<string, int> getRear()const {
-            return queue[rearPointer];
+        string getRear()const {
+            if (currentSize == 0){
+                return "Queue is empty";
+            }
+            return queue[((rearPointer -1 + capacity) % capacity)];
         }
         bool isFull(){
-            return currentSize == currentSize;
+            if (currentSize == capacity){
+                return true;
+            }
+            return false;
         }
         bool isEmpty(){
-            return currentSize == 0;
+            if (currentSize == 0){
+                return true;
+            }
+            return false;
         }
-        deque<variant<string, int>> getQueue(){
+        deque<string> getQueue()const {
             return queue;
         }
 
@@ -71,17 +84,12 @@ int main(){
     std::cin >> capacity;
 
     unique_ptr<CircularQueue> testQueue = std::make_unique<CircularQueue>(capacity);
-    testQueue->enqueue(15);
-    testQueue->enqueue(24);
-    testQueue->enqueue(2);
+    testQueue->enqueue("A");
+    testQueue->enqueue("B");
+    testQueue->enqueue("C");
     cout << "Queue is full: " << testQueue->isFull() << "\n";
-    cout << "Front: ";
-    testQueue->getFront();
-    cout << "\n";
-    cout << "Rear: ";
-    testQueue->getRear();
-    cout << "\n";
-    cout << "Full current queue: ";
+    cout << "Front: " << testQueue->getFront() << "\n";
+    cout << "Rear: " << testQueue->getRear() << "\n";
     testQueue->getQueue();
 
 
