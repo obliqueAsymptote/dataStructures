@@ -72,8 +72,12 @@ class CircularQueue{
             }
             return false;
         }
-        deque<string> getQueue()const {
-            return queue;
+        void getQueue()const {
+            for (int i = 0; i < currentSize; i++){
+                int index = (headPointer + i) % capacity;
+                cout << queue[index] << "\n";
+
+            };
         }
 
 };
@@ -82,14 +86,16 @@ int main(){
     int capacity;
     cout << "Enter circular queue capacity:\n";
     std::cin >> capacity;
+    std::cin.ignore();
 
     unique_ptr<CircularQueue> testQueue = std::make_unique<CircularQueue>(capacity);
-    testQueue->enqueue("A");
-    testQueue->enqueue("B");
-    testQueue->enqueue("C");
-    cout << "Queue is full: " << testQueue->isFull() << "\n";
-    cout << "Front: " << testQueue->getFront() << "\n";
-    cout << "Rear: " << testQueue->getRear() << "\n";
+    for (int i = 0; i < capacity; i++){
+        string item;
+        cout << "Enter item to enqueue: \n";
+        std::getline(std::cin, item);
+        testQueue->enqueue(item);
+        
+    }
     testQueue->getQueue();
 
 
