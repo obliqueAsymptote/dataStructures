@@ -5,7 +5,10 @@
 using
 std::string,
 std::cout,
-std::vector;
+std::vector,
+std::shared_ptr,
+std::getline,
+std::cin;
 
 class Graph{
     private:
@@ -34,3 +37,20 @@ class Graph{
             }
         }
 };
+
+int main(){
+    int vertices;
+    bool biDirectional = false;
+    cout << "Enter the number of vertices in your graph:\n";
+    cin >> vertices;
+    cin.ignore();
+    cout << "Is your graph direction? (y)/n:\n";
+    if (cin.peek() == '\n' || cin.peek() == 'y'){
+        biDirectional = true;
+    }
+
+    shared_ptr<Graph> graph = std::make_shared<Graph>(vertices, biDirectional);
+    
+
+    return 0;
+}
