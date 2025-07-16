@@ -10,7 +10,44 @@ std::vector,
 std::shared_ptr,
 std::getline,
 std::cin,
-std::optional;
+std::optional,
+std::pair;
+
+
+
+class Graph{
+    private:
+        vector<vector<int>> adjMatrix;
+        bool biDirectional;
+    public:
+        Graph(int n, bool direction) : adjMatrix(n, vector<int>(n, 0)), biDirectional(direction){}
+
+        void addWeight(int nodeOne, int nodeTwo, int weight){
+
+            adjMatrix[nodeOne][nodeTwo] = weight;
+            adjMatrix[nodeTwo][nodeOne] = weight;
+        }
+        void addEdge(int nodeOne, int nodeTwo){
+            adjMatrix[nodeOne][nodeTwo] = 1;
+            if (biDirectional){
+                adjMatrix[nodeTwo][nodeOne] = 1;
+            }
+        }
+        pair<string, int> dijkstrasFindPath(int startNode, int endNode) {
+            return;
+        }
+        void printGraph(){
+            for (int row = 0; row < adjMatrix.size(); row++){
+                for (int element = 0; element < adjMatrix.size(); element++){
+                    cout << adjMatrix[row][element] << " ";
+                }
+            cout << "\n";
+            }
+        }
+        bool getDirection(){
+            return biDirectional;
+        }
+};
 
 void addConnection(const shared_ptr<Graph>& graph, bool weight){
 
@@ -40,39 +77,6 @@ void addConnection(const shared_ptr<Graph>& graph, bool weight){
     }
 }
 
-class Graph{
-    private:
-        vector<vector<int>> adjMatrix;
-        bool biDirectional;
-    public:
-        Graph(int n, bool direction) : adjMatrix(n, vector<int>(n, 0)), biDirectional(direction){}
-
-        void addWeight(int nodeOne, int nodeTwo, int weight){
-
-            adjMatrix[nodeOne][nodeTwo] = weight;
-            adjMatrix[nodeTwo][nodeOne] = weight;
-        }
-        void addEdge(int nodeOne, int nodeTwo){
-            adjMatrix[nodeOne][nodeTwo] = 1;
-            if (biDirectional){
-                adjMatrix[nodeTwo][nodeOne] = 1;
-            }
-        }
-        void printGraph(){
-            for (int row = 0; row < adjMatrix.size(); row++){
-                for (int element = 0; element < adjMatrix.size(); element++){
-                    cout << adjMatrix[row][element] << " ";
-                }
-            cout << "\n";
-            }
-        }
-        bool getDirection(){
-            return biDirectional;
-        }
-};
-
-
-
 int main(){
     int vertices;
     bool biDirectional = false;
@@ -88,7 +92,7 @@ int main(){
     cout << "Does your graph have weights?\n";
     cin >> hasWeights;
     if (hasWeights && graph->getDirection() == true){
-        addConnection(graph, true);
+        //addConnection(graph, true);
     }
     
 
