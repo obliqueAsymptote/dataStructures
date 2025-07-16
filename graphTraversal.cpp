@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <optional>
 
 using
 std::string,
@@ -8,7 +9,36 @@ std::cout,
 std::vector,
 std::shared_ptr,
 std::getline,
-std::cin;
+std::cin,
+std::optional;
+
+void addConnection(const shared_ptr<Graph>& graph, bool weight){
+
+    int edgeNumber;
+    cout << "Please enter the amount of edges in your graph:\n";
+    cin >> edgeNumber;
+
+    for (int i = 0; i < edgeNumber; i++){
+        int nodeOne;
+        int nodeTwo;
+        cout << "Enter node one:\n";
+        cin >> nodeOne;
+        cout << "Enter node two:\n";
+        cin >> nodeTwo;
+
+        if (weight){
+            int Weight;
+            cout << "Enter weight:\n";
+            cin >> Weight;
+            graph->addWeight(nodeOne, nodeTwo, Weight);
+            graph->printGraph();
+            return;
+        }
+        graph->addEdge(nodeOne, nodeTwo);
+        cout << "Current graph:\n";
+        graph->printGraph();
+    }
+}
 
 class Graph{
     private:
@@ -36,7 +66,12 @@ class Graph{
             cout << "\n";
             }
         }
+        bool getDirection(){
+            return biDirectional;
+        }
 };
+
+
 
 int main(){
     int vertices;
@@ -48,8 +83,13 @@ int main(){
     if (cin.peek() == '\n' || cin.peek() == 'y'){
         biDirectional = true;
     }
-
     shared_ptr<Graph> graph = std::make_shared<Graph>(vertices, biDirectional);
+    bool hasWeights;
+    cout << "Does your graph have weights?\n";
+    cin >> hasWeights;
+    if (hasWeights && graph->getDirection() == true){
+        addConnection(graph, true);
+    }
     
 
     return 0;
