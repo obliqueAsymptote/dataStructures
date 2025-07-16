@@ -20,10 +20,10 @@ class Graph{
         vector<vector<int>> adjMatrix;
         bool biDirectional;
     public:
-        Graph(int n, bool direction) : adjMatrix(n, vector<int>(n, 0)), biDirectional(direction){}
-
+        Graph(int n, bool direction) : adjMatrix(n, vector<int>(n, 0)), biDirectional(direction){
+            adjMatrix.reserve(n*n);
+        }
         void addWeight(int nodeOne, int nodeTwo, int weight){
-
             adjMatrix[nodeOne][nodeTwo] = weight;
             adjMatrix[nodeTwo][nodeOne] = weight;
         }
@@ -33,9 +33,10 @@ class Graph{
                 adjMatrix[nodeTwo][nodeOne] = 1;
             }
         }
+        /*
         pair<string, int> dijkstrasFindPath(int startNode, int endNode) {
-            return;
         }
+        */
         void printGraph(){
             for (int row = 0; row < adjMatrix.size(); row++){
                 for (int element = 0; element < adjMatrix.size(); element++){
@@ -71,10 +72,10 @@ void addConnection(const shared_ptr<Graph>& graph, bool weight){
             graph->printGraph();
             return;
         }
-        graph->addEdge(nodeOne, nodeTwo);
-        cout << "Current graph:\n";
-        graph->printGraph();
+        graph->addEdge(nodeOne, nodeTwo);        
     }
+    cout << "Current graph:\n";
+        graph->printGraph();
 }
 
 int main(){
@@ -83,18 +84,25 @@ int main(){
     cout << "Enter the number of vertices in your graph:\n";
     cin >> vertices;
     cin.ignore();
-    cout << "Is your graph direction? (y)/n:\n";
+    cout << "Is your graph directed? (y)/n:\n";
     if (cin.peek() == '\n' || cin.peek() == 'y'){
         biDirectional = true;
     }
+    cin.ignore();
     shared_ptr<Graph> graph = std::make_shared<Graph>(vertices, biDirectional);
-    bool hasWeights;
-    cout << "Does your graph have weights?\n";
+    bool hasWeights = false;
+    cout << "Does your graph have weights? (y)/n:\n";
+    if (cin.peek() == '\n' || cin.peek() == 'y'){
+        hasWeights = true;
+    }
     cin >> hasWeights;
     if (hasWeights && graph->getDirection() == true){
-        //addConnection(graph, true);
+        addConnection(graph, true);
     }
-    
+    else{
+        addConnection(graph, false);
+    }
+
 
     return 0;
 }
