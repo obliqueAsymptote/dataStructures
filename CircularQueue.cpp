@@ -60,18 +60,10 @@ class CircularQueue{
             }
             return queue[((rearPointer -1 + capacity) % capacity)];
         }
-        bool isFull(){
-            if (currentSize == capacity){
-                return true;
-            }
-            return false;
-        }
-        bool isEmpty(){
-            if (currentSize == 0){
-                return true;
-            }
-            return false;
-        }
+        bool isFull(){ return currentSize == capacity;}
+        
+        bool isEmpty(){ return currentSize == 0;}
+
         void getQueue()const {
             for (int i = 0; i < currentSize; i++){
                 int index = (headPointer + i) % capacity;
